@@ -43,8 +43,14 @@ try:
 except ImportError:
     pass
 
-
 global_config = "/etc/telegram-send.conf"
+
+PARSE_MODE = "html"
+TELEGRAM_REGEX = (
+                    r".+web\.(telegram|tlgr)\.org\/\?legacy=1#\/im"
+                    r"\?p=c(?P<chat_id>\d+)_\d+"
+                )
+COLOR_CYAN = "cyan"
 
 
 def main():
@@ -376,7 +382,7 @@ async def send(
     if messages:
         async def send_message(message, parse_mode):
             if pre:
-                parse_mode = "html"
+                parse_mode = PARSE_MODE
                 message = pre_format(message)
             return await bot.send_message(
                 text=message,
@@ -574,7 +580,7 @@ async def configure(conf, channel=False, group=False, fm_integration=False):
     contact_url = "https://telegram.me/"
 
     print("Talk with the {} on Telegram ({}), create a bot and insert the token"
-          .format(markup("BotFather", "cyan"), contact_url + "BotFather"))
+          .format(markup("BotFather", COLOR_CYAN), contact_url + "BotFather"))
     try:
         token = input(markup(prompt, "magenta")).strip()
     except UnicodeEncodeError:
@@ -596,7 +602,7 @@ async def configure(conf, channel=False, group=False, fm_integration=False):
             fm_integration=fm_integration
         )
 
-    print("Connected with {}.\n".format(markup(bot_name, "cyan")))
+    print("Connected with {}.\n".format(markup(bot_name, COLOR_CYAN)))
 
     if channel:
         print("Do you want to send to a {} or a {} channel? [pub/priv]"
@@ -623,8 +629,7 @@ async def configure(conf, channel=False, group=False, fm_integration=False):
             )
             url = input(markup(prompt, "magenta")).strip()
             match = re.match(
-                r".+web\.(telegram|tlgr)\.org\/\?legacy=1#\/im"
-                r"\?p=c(?P<chat_id>\d+)_\d+",
+                TELEGRAM_REGEX,
                 url
             )
             chat_id = "-100" + match.group("chat_id")
@@ -639,14 +644,14 @@ async def configure(conf, channel=False, group=False, fm_integration=False):
                 # bot tries to send to a private channel
                 input(
                     "Please add {} as administrator to your "
-                    "channel and press Enter".format(markup(bot_name, "cyan"))
+                    "channel and press Enter".format(markup(bot_name, COLOR_CYAN))
                 )
         print(markup("\nCongratulations! telegram-send can now post to your "
                     "channel!", "green"))
     else:
         password = "".join([str(randint(0, 9)) for _ in range(5)])
         bot_url = contact_url + bot_name
-        fancy_bot_name = markup(bot_name, "cyan")
+        fancy_bot_name = markup(bot_name, COLOR_CYAN)
         if group:
             password = "/{}@{}".format(password, bot_name)
             print("Please add {} to your group\nand send the following message"
