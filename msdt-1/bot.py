@@ -431,10 +431,10 @@ async def send(
 
     if files:
         if captions:
-            for (f, c) in make_captions(files, captions):
+            for (f, caption) in make_captions(files, captions):
                 message_ids += [
                     await bot.send_document(
-                        document=f, caption=c, **kwargs_caption
+                        document=f, caption=caption, **kwargs_caption
                     )
                 ]
         else:
@@ -443,9 +443,9 @@ async def send(
 
     if images:
         if captions:
-            for (i, c) in make_captions(images, captions):
+            for (i, caption) in make_captions(images, captions):
                 message_ids += [
-                    await bot.send_photo(photo=i, caption=c, **kwargs_caption)
+                    await bot.send_photo(photo=i, caption=caption, **kwargs_caption)
                 ]
         else:
             for i in images:
@@ -457,34 +457,36 @@ async def send(
 
     if animations:
         if captions:
-            for (a, c) in make_captions(animations, captions):
+            for (animation, caption) in make_captions(animations, captions):
                 message_ids += [
                     await bot.send_animation(
-                        animation=a,
-                        caption=c,
+                        animation=animation,
+                        caption=caption,
                         **kwargs_caption
                     )
                 ]
         else:
-            for a in animations:
-                message_ids += [await bot.send_animation(animation=a, **kwargs)]
+            for animation in animations:
+                message_ids += [
+                    await bot.send_animation(animation=animation, **kwargs)
+                ]
 
     if videos:
         if captions:
-            for (v, c) in make_captions(videos, captions):
+            for (video, caption) in make_captions(videos, captions):
                 message_ids += [
                     await bot.send_video(
-                        video=v,
-                        caption=c,
+                        video=video,
+                        caption=caption,
                         supports_streaming=True,
                         **kwargs_caption
                     )
                 ]
         else:
-            for v in videos:
+            for video in videos:
                 message_ids += [
                     await bot.send_video(
-                        video=v,
+                        video=video,
                         supports_streaming=True,
                         **kwargs
                     )
@@ -493,17 +495,19 @@ async def send(
 
     if audios:
         if captions:
-            for (a, c) in make_captions(audios, captions):
+            for (animation, caption) in make_captions(audios, captions):
                 message_ids += [
                     await bot.send_audio(
-                        audio=a,
-                        caption=c,
+                        audio=animation,
+                        caption=caption,
                         **kwargs_caption
                     )
                 ]
         else:
-            for a in audios:
-                message_ids += [await bot.send_audio(audio=a, **kwargs)]
+            for animation in audios:
+                message_ids += [
+                    await bot.send_audio(audio=animation, **kwargs)
+                ]
 
     if locations:
         it = iter(locations)
