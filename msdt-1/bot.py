@@ -30,13 +30,14 @@ from os import makedirs, remove
 from os.path import dirname, exists, expanduser, join
 from random import randint
 from shutil import which
-from typing import NamedTuple, Union
 from subprocess import check_output
 from warnings import warn
 
 from telegram.constants import MessageLimit
 from .version import __version__
 from .utils import pre_format, split_message, get_config_path, markup
+from .exceptions import ConfigError
+from .settings import Settings
 
 try:
     import readline
@@ -785,15 +786,6 @@ def clean():
                 "Please run: " + markup("sudo telegram-send --clean", "bold")
             )
             sys.exit(1)
-
-
-class ConfigError(Exception):
-    pass
-
-
-class Settings(NamedTuple):
-    token: str
-    chat_id: Union[int, str]
 
 
 def get_config_settings(conf=None) -> Settings:
