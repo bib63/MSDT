@@ -76,7 +76,6 @@ def serialize_result(variant: int, checksum: str) -> None:
 
 def main():
     numbers_with_mistakes = get_list("89.csv")
-    print(len(numbers_with_mistakes))
     check_sum = calculate_checksum(numbers_with_mistakes)
     serialize_result(89, check_sum)
 
