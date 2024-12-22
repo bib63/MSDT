@@ -20,6 +20,9 @@ import asyncio
 import configparser
 import re
 import sys
+import colorama
+import telegram
+
 from copy import deepcopy
 from os import makedirs, remove
 from os.path import dirname, exists, expanduser, join
@@ -29,10 +32,7 @@ from typing import NamedTuple, Union
 from subprocess import check_output
 from warnings import warn
 
-import colorama
-import telegram
 from telegram.constants import MessageLimit
-
 from .version import __version__
 from .utils import pre_format, split_message, get_config_path, markup
 
