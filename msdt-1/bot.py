@@ -48,10 +48,21 @@ global_config = "/etc/telegram-send.conf"
 
 
 def main():
+    """
+    The main function is defined in Python and uses asyncio to run the `run`
+    function.
+    """
     asyncio.run(run())
 
 
 async def run():
+    """
+    The function defines a command-line interface for sending messages and files
+    over Telegram with various options and configurations.
+    :return: The `run()` function returns the result of the asynchronous tasks
+    based on the arguments provided by the user. The return statements within the
+    function are as follows:
+    """
     colorama.init()
     parser = argparse.ArgumentParser(
         description="Send messages and files over Telegram.",
@@ -186,7 +197,7 @@ async def run():
         nargs="+",
         type=int
     )
-    
+
     parser.add_argument(
         "--config",
         help="specify configuration file",
@@ -298,12 +309,13 @@ async def run():
 
 
 async def send(
-    *,
-    messages=None,      files=None,                       images=None,
-    stickers=None,      animations=None,                  videos=None,
-    audios=None,        captions=None,                    locations=None,
-    conf=None,          parse_mode=None,                  pre=False,
-    silent=False,       disable_web_page_preview=False,   timeout=30):
+        *,
+        messages=None,      files=None,                       images=None,
+        stickers=None,      animations=None,                  videos=None,
+        audios=None,        captions=None,                    locations=None,
+        conf=None,          parse_mode=None,                  pre=False,
+        silent=False,       disable_web_page_preview=False,   timeout=30
+    ):
     """Send data over Telegram. All arguments are optional.
 
     Always use this function with explicit keyword arguments. So
@@ -393,6 +405,22 @@ async def send(
                 ]
 
     def make_captions(items, captions):
+        """
+        The function `make_captions` ensures that captions are of equal length to
+        items by padding with `None` values when necessary and then zipping them
+        together.
+        
+        :param items: Items refer to a collection of images or files for which you
+        want to create captions
+        :param captions: The `captions` parameter in the `make_captions` function
+        is a list that contains captions for each item in the `items` list. If
+        there are fewer captions than items, the function pads the `captions` list
+        with `None` values to make it the same length as
+        :return: The function `make_captions` returns a zip object containing pairs
+        of items and captions. If the number of items is greater than the number of
+        captions, the function pads the captions list with `None` values to make
+        them equal in length before zipping them together.
+        """
         # make captions equal length when not all images/files have captions
         captions += [None] * (len(items) - len(captions))
         return zip(items, captions)
@@ -731,6 +759,10 @@ echo "$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS" | sed 's/ /\\\\ /g' | xargs telegram
 
 
 def clean():
+    """
+    The function `clean()` performs cleanup tasks by deleting specific
+    configuration files.
+    """
     integrate_file_manager(clean=True)
     conf = get_config_path()
     if exists(conf):
@@ -756,6 +788,19 @@ class Settings(NamedTuple):
 
 
 def get_config_settings(conf=None) -> Settings:
+    """
+    The function `get_config_settings` reads a configuration file, checks for
+    required settings, and returns a `Settings` object with Telegram token and chat
+    ID.
+    
+    :param conf: The `conf` parameter in the `get_config_settings` function is used
+    to specify the configuration file path. If `conf` is provided, it will be used
+    as the configuration file path. If `conf` is not provided (i.e., it is `None`),
+    the function will use
+    :return: The function `get_config_settings` is returning an instance of the
+    `Settings` class with the `token` and `chat_id` values extracted from the
+    configuration file.
+    """
     conf = expanduser(conf) if conf else get_config_path()
     config = configparser.ConfigParser()
     if not config.read(conf) or not config.has_section("telegram"):
